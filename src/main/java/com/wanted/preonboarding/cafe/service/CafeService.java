@@ -1,39 +1,27 @@
 package com.wanted.preonboarding.cafe.service;
 
-import com.wanted.preonboarding.cafe.service.handler.Cafe;
+import com.wanted.preonboarding.cafe.service.handler.Beverage;
 import com.wanted.preonboarding.cafe.service.handler.Cashier;
 import com.wanted.preonboarding.cafe.service.handler.Customer;
-import com.wanted.preonboarding.cafe.service.handler.Beverage;
-import com.wanted.preonboarding.cafe.service.handler.discount.DiscountPolicy;
-import com.wanted.preonboarding.cafe.service.handler.discount.MembershipDiscountPolicy;
-import com.wanted.preonboarding.cafe.service.handler.discount.TelecomDiscountPolicy;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CafeService {
-    private final Cafe wantedCafe;
-
-    public String orderFrom(HashMap<String, Integer> menu){
-        // 들어 온 주문에 따라서 적절한 `Beverage` 객체를 상속 받은 객체를 생성
-        // Cashier 생성자 파라미터에 Barista 추가 필요
     
-        String type = "telecom";
+    /**
+     * 고객 주문
+     */
+    public String orderFrom(Customer customer) {
     
-        DiscountPolicy discountPolicy = switch (type.toLowerCase()) {
-            case "telecom" -> new TelecomDiscountPolicy();
-            case "membership" -> new MembershipDiscountPolicy();
-            default -> null;
-        };
+        Cashier cashier = customer.getCashier();
+        Map<Beverage, Integer> orders = customer.getOrders();
+        String paymentMethod = customer.getPaymentMethod();
     
-        Cashier cashier = new Cashier(wantedCafe);
-        Map<Beverage, Integer> myOrders = new HashMap<>();
-        myOrders.put(new Americano(), 3);
-        Customer c1 = new Customer("Card", myOrders);
-        return c1.buyCoffee(cashier);
+        return cashier.takeOrders(orders, paymentMethod);
     }
 }

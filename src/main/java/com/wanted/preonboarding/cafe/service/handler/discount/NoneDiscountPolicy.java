@@ -1,8 +1,8 @@
 package com.wanted.preonboarding.cafe.service.handler.discount;
 
-public class MembershipDiscountPolicy implements DiscountPolicy {
+public class NoneDiscountPolicy implements DiscountPolicy {
     
-    private static final long DISCOUNT_AMOUNT = 90;
+    private static final long DISCOUNT_AMOUNT = 100;
     
     @Override
     public boolean isSatisfied() {
